@@ -1,18 +1,16 @@
 package com.octo
 
-import java.util.concurrent.TimeUnit
+import java.io.File
 
-import com.dimafeng.testcontainers.ForAllTestContainer
+import com.dimafeng.testcontainers.{DockerComposeContainer, ForAllTestContainer}
 import org.scalatest.{BeforeAndAfterAll, FlatSpec, Matchers}
 
-import scala.collection.JavaConverters._
-import scala.concurrent.duration._
-import scala.concurrent.{Await, ExecutionContext, Future}
-import scala.util.Random
+import scala.concurrent.ExecutionContext
 
 trait ArticleSpec extends FlatSpec with Matchers with BeforeAndAfterAll with ForAllTestContainer {
+  implicit val ec: ExecutionContext = ExecutionContext.global
 
-  override val container = 
+  override val container = DockerComposeContainer(new File("src/test/resources/docker-compose.yml"))
     
   override def beforeAll(): Unit = {
     super.beforeAll()
@@ -23,5 +21,4 @@ trait ArticleSpec extends FlatSpec with Matchers with BeforeAndAfterAll with For
     super.afterAll()
   }
   
-
 }
