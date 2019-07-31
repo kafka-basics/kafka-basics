@@ -3,7 +3,9 @@ name := "kafka-basics2"
 version := "0.1"
 
 scalaVersion := "2.12.7"
-val kafkaVersion = "1.1.0"
+val kafkaVersion = "2.2.0-cp2"
+
+resolvers += "confluent" at "https://packages.confluent.io/maven/"
 
 libraryDependencies ++= Seq("org.scalatest" %% "scalatest" % "3.0.5" % Test,
   "org.apache.kafka" % "kafka-clients" % kafkaVersion,

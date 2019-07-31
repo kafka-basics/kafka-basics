@@ -1,10 +1,11 @@
+
 ---
 version: '2'
 services:
   zookeeper:
     ports:
       - "2181:2181"
-    image: confluentinc/cp-zookeeper:4.0.2
+    image: confluentinc/cp-zookeeper:5.2.1-1
     hostname: zookeeper
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
@@ -13,7 +14,7 @@ services:
   kafka:
     ports:
       - "9092:9092"
-    image: confluentinc/cp-enterprise-kafka:4.0.2
+    image: confluentinc/cp-enterprise-kafka:5.2.1-1
     hostname: kafka
     depends_on:
       - zookeeper
@@ -29,15 +30,6 @@ services:
       CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
       CONFLUENT_METRICS_ENABLE: 'true'
       CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
+    volumes:
+      - "../../../target/data:/var/lib/kafka/data"
 
-  schema_registry:
-    ports:
-      - "8081:8081"
-    image: confluentinc/cp-schema-registry:4.0.2
-    hostname: schema_registry
-    depends_on:
-      - zookeeper
-      - kafka
-    environment:
-      SCHEMA_REGISTRY_HOST_NAME: schema_registry
-      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: 'zookeeper:2181'
