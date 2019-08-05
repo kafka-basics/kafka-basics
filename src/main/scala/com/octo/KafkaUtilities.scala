@@ -1,24 +1,31 @@
 package com.octo
 
 import org.apache.kafka.clients.admin._
-
-import scala.collection.JavaConverters.{mapAsJavaMapConverter, seqAsJavaListConverter}
+import java.util.Properties
+import scala.collection.JavaConverters._
+import scala.collection.JavaConversions._
 
 object KafkaUtilities {
 
 
   def createTopic() {
-    val adminKafka = AdminClient.create(Map(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG -> "localhost:9092")
-      .asJava.asInstanceOf[java.util.Map[String, AnyRef]])
-    val confNewTopic = new NewTopic("NewTopic", 2, 2)
-    val listconfNewTopic = List(confNewTopic).asJava
-    val t = adminKafka.createTopics(listconfNewTopic, new CreateTopicsOptions())
+    val props = new Properties()
+    props.setProperty(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092")
+    val adminClient = AdminClient.create(props)
+    val numPartitions = 1
+    val replicationFactor = 1.toShort
+    val newTopic = new NewTopic("new-topic-name", numPartitions, replicationFactor)
+    val topicStatus = adminClient.createTopics(List(newTopic).asJavaCollection).values()
+    println("created topic"+topicStatus.keySet())
+    val topics = adminClient.listTopics
+    val topicNames = topics.names.get
+    for (topic <- topicNames) {
+      println(topic)
+    }
+  }
 
-    val listTopics = adminKafka.listTopics()
-    val listTopicNames = listTopics.names().get()
-    print(listTopicNames)
-
-
-    return listTopicNames
+  def main(args: Array[String]): Unit = {
+    //println("Hello, world!")
+    createTopic()
   }
 }
