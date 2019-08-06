@@ -12,9 +12,9 @@ object KafkaUtilities {
     val props = new Properties()
     props.setProperty(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092")
     val adminClient = AdminClient.create(props)
-    val numPartitions = 1
+    val numPartitions = 3
     val replicationFactor = 1.toShort
-    val newTopic = new NewTopic("new-topic-name", numPartitions, replicationFactor)
+    val newTopic = new NewTopic("new-topic-test", numPartitions, replicationFactor)
     val topicStatus = adminClient.createTopics(List(newTopic).asJavaCollection).values()
     println("created topic"+topicStatus.keySet())
     val topics = adminClient.listTopics
