@@ -1,10 +1,13 @@
 package com.octo
 
+import java.io.File
 import java.lang.Boolean
+
+
 
 class ExtentSpec extends AbstractSpec {
 
-  "Extent" should "contain" in  {
+  "Create topic with 3 partitions" should "create 3 directories" in  {
     //GIVEN
     //kafka.createTopic(name="toto", partCount = , extentSize= )
 
@@ -17,9 +20,16 @@ class ExtentSpec extends AbstractSpec {
     //check in target directory if toto file existsaAd =
 
     val t  = KafkaUtilities.createTopic()
-    print(t)
+    val d = new File("../../../target/data")
+    if (d.exists && d.isDirectory) {
+      val files = d.listFiles.filter(_.getName.startsWith("new-topic-test-"))
+      assert(3==files.length)
 
-    assert(Boolean.TRUE)
+    }
+    //KafkaUtilities.sendMessage()
+    //print(t)
+
+
 
   }
 
